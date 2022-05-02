@@ -1,0 +1,131 @@
+#+PROPERTY: header-args :var base-url="https://localhost:7215"
+
+* get all items
+#+begin_src emacs-lisp
+  (jacob-web-request-helper "GET" (concat base-url "/api/todo"))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Sun, 01 May 2022 15:21:50 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+
+[
+    {
+        "isDone": true,
+        "description": "Clean the car using hot, soapy water.",
+        "title": "Wash car",
+        "id": 2
+    },
+    {
+        "isDone": true,
+        "description": "Clean the car using hot, soapy water.",
+        "title": "Wash car",
+        "id": 3
+    },
+    {
+        "isDone": true,
+        "description": "Clean the car using hot, soapy water.",
+        "title": "Wash car",
+        "id": 4
+    },
+    {
+        "isDone": true,
+        "description": "Clean the car using hot, soapy water.",
+        "title": "Wash car",
+        "id": 5
+    },
+    {
+        "isDone": true,
+        "description": "Clean the car using hot, soapy water.",
+        "title": "Wash car",
+        "id": 6
+    },
+    {
+        "isDone": true,
+        "description": "Clean the car using hot, soapy water.",
+        "title": "become cool and powerful",
+        "id": 7
+    }
+]
+#+end_example
+
+* get one item
+#+begin_src emacs-lisp
+  (jacob-web-request-helper "GET"
+                            (concat base-url "/api/todo/1"))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Sun, 01 May 2022 13:13:58 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+
+{
+    "isDone": true,
+    "description": "Clean the car using hot, soapy water.",
+    "title": "become cool and powerfulerereerer",
+    "id": 1
+}
+#+end_example
+
+* create new item
+#+begin_src emacs-lisp
+  (jacob-web-request-helper "POST"
+                            (concat base-url "/api/todo")
+                            '(("Content-Type" . "application/json"))
+                            (json-encode (quote (("Title" . "become cool and powerful")
+                                                 ("Description" . "Clean the car using hot, soapy water.")
+                                                 ("IsDone" . t)))))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+HTTP/1.1 201 Created
+Content-Type: application/json; charset=utf-8
+Date: Sat, 30 Apr 2022 21:09:46 GMT
+Server: Kestrel
+Location: https://localhost:7215/api/Todo/7
+Transfer-Encoding: chunked
+
+{
+    "isDone": true,
+    "description": "Clean the car using hot, soapy water.",
+    "title": "become cool and powerful",
+    "id": 7
+}
+#+end_example
+
+* update existing item
+#+begin_src emacs-lisp
+  (jacob-web-request-helper "PUT"
+                            (concat base-url "/api/todo/1")
+                            (quote (("Content-Type" . "application/json")))
+                            (json-encode (quote (("Id" . 1)
+                                                 ("Title" . "become cool and powerfulerereerer")
+                                                 ("Description" . "Clean the car using hot, soapy water.")
+                                                 ("IsDone" . t)))))
+#+end_src
+
+#+RESULTS:
+: HTTP/1.1 204 No Content
+: Date: Sun, 01 May 2022 13:13:51 GMT
+: Server: Kestrel
+: 
+
+* delete existing item
+#+begin_src emacs-lisp
+  (jacob-web-request-helper "DELETE" (concat base-url "/api/todo/1"))
+#+end_src
+
+#+RESULTS:
+: HTTP/1.1 204 No Content
+: Date: Sun, 01 May 2022 13:29:49 GMT
+: Server: Kestrel
+: 
